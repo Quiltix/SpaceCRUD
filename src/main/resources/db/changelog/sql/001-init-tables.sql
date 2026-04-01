@@ -51,7 +51,10 @@ create table if not exists experiments (
     end_time TIMESTAMPTZ,
     results text
 );
-
+create table if not exists resource_types (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(50) UNIQUE
+);
 -- 6. Ресурсы (Учет текущих запасов на аппарате)
 create table if not exists resources (
     id SERIAL PRIMARY KEY,
@@ -61,10 +64,6 @@ create table if not exists resources (
     max_capacity DECIMAL(12, 3) NOT NULL,
     unit VARCHAR(20),
     last_updated TIMESTAMPTZ
-);
-create table if not exists resource_types (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(50) UNIQUE
 );
 
 create table if not exists resource_logs (

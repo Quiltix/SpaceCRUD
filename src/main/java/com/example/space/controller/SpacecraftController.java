@@ -4,7 +4,6 @@ package com.example.space.controller;
 import com.example.space.data.dto.spacecraft.SpacecraftCreateDto;
 import com.example.space.data.dto.spacecraft.SpacecraftResponseDto;
 import com.example.space.data.dto.spacecraft.SpacecraftUpdateDto;
-import com.example.space.data.model.Spacecraft;
 import com.example.space.mapper.SpacecraftMapper;
 import com.example.space.service.SpacecraftService;
 import jakarta.validation.Valid;
@@ -14,12 +13,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
-@SuppressWarnings("ALL")
 @RestController
 @RequestMapping("/api/spacecraft")
-@RequiredArgsConstructor // Lombok генерирует конструктор для final полей
+@RequiredArgsConstructor
 public class SpacecraftController {
 
     private final SpacecraftService spacecraftService;
@@ -30,26 +27,17 @@ public class SpacecraftController {
     public ResponseEntity<SpacecraftResponseDto> createSpacecraft(
             @Valid @RequestBody SpacecraftCreateDto createDto) {
 
-        // Конвертируем DTO в Entity
-        Spacecraft spacecraftToSave = spacecraftMapper.toEntity(createDto);
-
         // Сохраняем через сервис
-        Spacecraft savedSpacecraft = spacecraftService.createSpacecraft(spacecraftToSave);
-
-        // Конвертируем результат обратно в DTO
-        SpacecraftResponseDto responseDto = spacecraftMapper.toDto(savedSpacecraft);
+        SpacecraftResponseDto spacecraft = spacecraftService.createSpacecraft(createDto);
 
         // Возвращаем 201 Created
-        return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(spacecraft);
     }
 
     // 2. READ ALL (GET)
     @GetMapping
     public ResponseEntity<List<SpacecraftResponseDto>> getAllSpacecrafts() {
-        List<SpacecraftResponseDto> list = spacecraftService.getAllSpacecrafts()
-                .stream()
-                .map(spacecraftMapper::toDto) // Преобразуем каждый элемент списка
-                .collect(Collectors.toList());
+        List<SpacecraftResponseDto> list = spacecraftService.getAllSpacecrafts();
 
         return ResponseEntity.ok(list);
     }
@@ -57,26 +45,18 @@ public class SpacecraftController {
     // 3. READ ONE (GET by ID)
     @GetMapping("/{id}")
     public ResponseEntity<SpacecraftResponseDto> getSpacecraftById(@PathVariable Integer id) {
-        Spacecraft spacecraft = spacecraftService.getSpacecraftDetails(id);
-        return ResponseEntity.ok(spacecraftMapper.toDto(spacecraft));
+        SpacecraftResponseDto spacecraft = spacecraftService.getSpacecraftById(id);
+        return ResponseEntity.ok(spacecraft);
     }
 
-    // 4. UPDATE (PUT)
     @PutMapping("/{id}")
     public ResponseEntity<SpacecraftResponseDto> updateSpacecraft(
             @PathVariable Integer id,
             @Valid @RequestBody SpacecraftUpdateDto updateDto) {
 
-        // 1. Получаем текущую сущность
-        Spacecraft existingSpacecraft = spacecraftService.getSpacecraftDetails(id);
+        SpacecraftResponseDto updated = spacecraftService.updateSpacecraft(id, updateDto);
 
-        // 2. Обновляем поля из DTO
-        spacecraftMapper.updateEntityFromDto(updateDto, existingSpacecraft);
-
-        // 3. Сохраняем изменения
-        Spacecraft updated = spacecraftService.updateSpacecraft(existingSpacecraft);
-
-        return ResponseEntity.ok(spacecraftMapper.toDto(updated));
+        return ResponseEntity.ok(updated);
     }
 
     @DeleteMapping("/{id}")

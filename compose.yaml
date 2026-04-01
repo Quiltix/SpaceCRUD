@@ -1,9 +1,18 @@
+version: '3.8'
+
 services:
-  postgres:
-    image: 'postgres:latest'
+  postgres-db:
+    image: postgres:15-alpine
+    container_name: space_mission_db
     environment:
-      - 'POSTGRES_DB=mydatabase'
-      - 'POSTGRES_PASSWORD=secret'
-      - 'POSTGRES_USER=myuser'
+      POSTGRES_USER: space_admin
+      POSTGRES_PASSWORD: space_password
+      POSTGRES_DB: space_mission_control
     ports:
-      - '5432'
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
