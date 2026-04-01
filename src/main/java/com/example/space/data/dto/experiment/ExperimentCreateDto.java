@@ -10,22 +10,22 @@ import java.time.LocalDateTime;
 
 @Data
 public class ExperimentCreateDto {
- @NotBlank(message = "Name is mandatory")
- @Size(max =100)
- private String name;
+    @NotBlank(message = "Name is mandatory")
+    @Size(max =100)
+    private String name;
 
- private Integer missionId;
+    private Integer missionId;
 
- @Size(max =500)
- private String description;
+    @Size(max =500)
+    private String description;
 
- private ExperimentStatus experimentStatus; // Если null, сервис поставит дефолт
+    private ExperimentStatus experimentStatus; // Если null, сервис поставит дефолт
 
- private Integer responsibleMemberId;
+    private Integer responsibleMemberId;
 
- @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
- private LocalDateTime startTime;
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    private LocalDateTime startTime;
 
- @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
- private LocalDateTime endTime;
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    private LocalDateTime endTime;
 }

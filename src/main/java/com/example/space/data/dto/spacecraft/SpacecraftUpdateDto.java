@@ -8,16 +8,16 @@ import java.time.LocalDate;
 
 @Data
 public class SpacecraftUpdateDto {
- // При обновлении обычно разрешают менять статус, локацию и характеристики, но не ID
+    // При обновлении обычно разрешают менять статус, локацию и характеристики, но не ID
 
- private String model;
+    private String model;
 
- private SpacecraftStatus spacecraftStatus;
+    private SpacecraftStatus spacecraftStatus;
 
- private String specifications;
+    private String specifications;
 
- private String currentLocation;
+    private String currentLocation;
 
- @JsonFormat(pattern = "yyyy-MM-dd")
- private LocalDate launchDate;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate launchDate;
 }

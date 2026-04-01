@@ -8,23 +8,23 @@ import java.time.LocalDateTime;
 
 @Data
 public class ExperimentResponseDto {
- private Integer id;
+    private Integer id;
 
- private String name;
+    private String name;
 
- private Integer missionId;
+    private Integer missionId;
 
- private String description;
+    private String description;
 
- private ExperimentStatus experimentStatus;
+    private ExperimentStatus experimentStatus;
 
- private Integer responsibleMemberId;
+    private Integer responsibleMemberId;
 
- @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
- private LocalDateTime startTime;
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    private LocalDateTime startTime;
 
- @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
- private LocalDateTime endTime;
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    private LocalDateTime endTime;
 
- private String results;
+    private String results;
 }

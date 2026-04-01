@@ -8,19 +8,19 @@ import java.time.LocalDateTime;
 
 @Data
 public class MissionResponseDto {
- private Integer id;
+     private Integer id;
 
- private String name;
+     private String name;
 
- private Integer spacecraftId;
+     private Integer spacecraftId;
 
- @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
- private LocalDateTime startDate;
+     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+     private LocalDateTime startDate;
 
- @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
- private LocalDateTime endDate;
+     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+     private LocalDateTime endDate;
 
- private MissionStatus missionStatus;
+     private MissionStatus missionStatus;
 
- private String objectives;
+     private String objectives;
 }

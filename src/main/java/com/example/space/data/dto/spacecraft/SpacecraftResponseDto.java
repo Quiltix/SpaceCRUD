@@ -8,18 +8,18 @@ import java.time.LocalDate;
 
 @Data
 public class SpacecraftResponseDto {
- private Integer id;
+    private Integer id;
 
- private String name;
+    private String name;
 
- private String model;
+    private String model;
 
- @JsonFormat(pattern = "yyyy-MM-dd")
- private LocalDate launchDate;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate launchDate;
 
- private SpacecraftStatus spacecraftStatus;
+    private SpacecraftStatus spacecraftStatus;
 
- private String specifications;
+    private String specifications;
 
- private String currentLocation;
+    private String currentLocation;
 }

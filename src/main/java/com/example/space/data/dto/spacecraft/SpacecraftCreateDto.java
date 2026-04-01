@@ -10,19 +10,19 @@ import java.time.LocalDate;
 
 @Data
 public class SpacecraftCreateDto {
- @NotBlank(message = "Name is mandatory")
- @Size(max =100)
- private String name;
+    @NotBlank(message = "Name is mandatory")
+    @Size(max =100)
+    private String name;
 
- @Size(max =100)
- private String model;
+    @Size(max =100)
+    private String model;
 
- @JsonFormat(pattern = "yyyy-MM-dd")
- private LocalDate launchDate;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate launchDate;
 
- private SpacecraftStatus spacecraftStatus; // Если null, сервис поставит дефолт "construction"
+    private SpacecraftStatus spacecraftStatus; // Если null, сервис поставит дефолт "construction"
 
- private String specifications;
+    private String specifications;
 
- private String currentLocation;
+    private String currentLocation;
 }
