@@ -1,5 +1,6 @@
 package com.example.space.data.dto.experiment;
 
+import com.example.space.data.enums.ExperimentStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -18,7 +19,7 @@ public class ExperimentCreateDto {
  @Size(max =500)
  private String description;
 
- private String experimentStatus; // Если null, сервис поставит дефолт
+ private ExperimentStatus experimentStatus; // Если null, сервис поставит дефолт
 
  private Integer responsibleMemberId;
 

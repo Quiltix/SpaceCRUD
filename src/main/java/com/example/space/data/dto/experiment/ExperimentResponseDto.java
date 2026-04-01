@@ -1,5 +1,6 @@
 package com.example.space.data.dto.experiment;
 
+import com.example.space.data.enums.ExperimentStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
@@ -15,7 +16,7 @@ public class ExperimentResponseDto {
 
  private String description;
 
- private String experimentStatus;
+ private ExperimentStatus experimentStatus;
 
  private Integer responsibleMemberId;
 
