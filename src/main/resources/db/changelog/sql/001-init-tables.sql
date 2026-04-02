@@ -53,7 +53,7 @@ create table if not exists experiments (
 );
 create table if not exists resource_types (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(50) UNIQUE
+    name VARCHAR(100) UNIQUE
 );
 -- 6. Ресурсы (Учет текущих запасов на аппарате)
 create table if not exists resources (

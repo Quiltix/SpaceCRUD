@@ -6,10 +6,12 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
@@ -29,6 +31,26 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 Collections.singletonList(ex.getMessage())
         );
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
+
+    /**
+     * Обрабатывает ошибки, когда тело запроса не может быть прочитано.
+     * Например, из-за неверного формата JSON или несоответствия типов.
+     */
+    @Override
+    protected ResponseEntity<Object> handleHttpMessageNotReadable(
+            HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+
+        // Получаем более конкретную причину ошибки
+        String detail = ex.getMostSpecificCause().getMessage();
+
+        ErrorResponseDto errorResponse = new ErrorResponseDto(
+                HttpStatus.BAD_REQUEST.value(),
+                "Invalid request format",
+                Collections.singletonList(detail)
+        );
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
     // Обработчик для ошибок валидации (@Valid)
