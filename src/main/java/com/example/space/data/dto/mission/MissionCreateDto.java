@@ -1,28 +1,31 @@
 package com.example.space.data.dto.mission;
 
+
 import com.example.space.data.enums.MissionStatus;
-import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.time.LocalDateTime;
 
 @Data
 public class MissionCreateDto {
-    @NotBlank(message = "Name is mandatory")
-    @Size(max =100)
-    private String name;
 
+    @NotNull(message = "Spacecraft ID cannot be null")
     private Integer spacecraftId;
 
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @NotBlank(message = "Mission name cannot be blank")
+    private String name;
+
+    @NotNull(message = "Start date cannot be null")
+    @FutureOrPresent(message = "Start date must be in the present or future")
     private LocalDateTime startDate;
 
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime endDate;
 
-    private MissionStatus missionStatus; // Если null, сервис поставит дефолт
+    @NotNull(message = "Mission status cannot be null")
+    private MissionStatus missionStatus;
 
     private String objectives;
 }

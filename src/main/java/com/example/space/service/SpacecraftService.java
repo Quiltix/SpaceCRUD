@@ -6,6 +6,7 @@ import com.example.space.data.dto.spacecraft.SpacecraftCreateDto;
 import com.example.space.data.dto.spacecraft.SpacecraftResponseDto;
 import com.example.space.data.dto.spacecraft.SpacecraftUpdateDto;
 import com.example.space.data.model.Spacecraft;
+import com.example.space.exception.error.EntityNotFoundException;
 import com.example.space.mapper.SpacecraftMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -37,7 +38,7 @@ public class SpacecraftService {
 
     public SpacecraftResponseDto getSpacecraftById(Integer id) {
         Spacecraft entity = spacecraftDao.findById(id)
-                .orElseThrow(() -> new RuntimeException("Spacecraft not found with id: " + id));
+                .orElseThrow(() -> new EntityNotFoundException("Spacecraft not found with id: " + id));
         return spacecraftMapper.toDto(entity);
     }
 
@@ -50,7 +51,7 @@ public class SpacecraftService {
     @Transactional
     public SpacecraftResponseDto updateSpacecraft(Integer id, SpacecraftUpdateDto updateDto) {
         Spacecraft existingEntity = spacecraftDao.findById(id)
-                .orElseThrow(() -> new RuntimeException("Spacecraft not found with id: " + id));
+                .orElseThrow(() -> new EntityNotFoundException("Spacecraft not found with id: " + id));
 
         spacecraftMapper.updateEntityFromDto(updateDto, existingEntity);
 
@@ -66,6 +67,6 @@ public class SpacecraftService {
 
     public Spacecraft getSpacecraftEntityById(Integer id) {
         return spacecraftDao.findById(id)
-                .orElseThrow(() -> new RuntimeException("Spacecraft not found with id: " + id));
+                .orElseThrow(() -> new EntityNotFoundException("Spacecraft not found with id: " + id));
     }
 }
