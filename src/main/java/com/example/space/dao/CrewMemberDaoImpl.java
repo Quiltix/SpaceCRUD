@@ -8,12 +8,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Repository
 @RequiredArgsConstructor
@@ -73,9 +68,29 @@ public class CrewMemberDaoImpl implements CrewMemberDao {
     }
 
     @Override
-    public List<CrewMember> findAll() {
-        String sql = "SELECT * FROM crew_members";
-        return jdbcTemplate.query(sql, rowMapper);
+    public List<CrewMember> findAll(String search, HealthStatus status) {
+        StringBuilder sql = new StringBuilder("SELECT * FROM crew_members");
+        List<Object> params = new ArrayList<>();
+        boolean hasWhere = false;
+
+        if (status != null) {
+            sql.append(" WHERE health_status = ?");
+            params.add(status.name());
+            hasWhere = true;
+        }
+
+        if (search != null && !search.trim().isEmpty()) {
+            String searchPattern = "%" + search.trim() + "%";
+
+            sql.append(hasWhere ? " AND " : " WHERE ");
+            sql.append("(first_name ILIKE ? OR last_name ILIKE ? OR specialization ILIKE ?)");
+
+            params.add(searchPattern);
+            params.add(searchPattern);
+            params.add(searchPattern);
+        }
+
+        return jdbcTemplate.query(sql.toString(), rowMapper, params.toArray());
     }
 
     @Override

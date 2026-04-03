@@ -5,6 +5,7 @@ import com.example.space.dao.CrewMemberDao;
 import com.example.space.data.dto.crewmember.CrewMemberCreateDto;
 import com.example.space.data.dto.crewmember.CrewMemberResponseDto;
 import com.example.space.data.dto.crewmember.CrewMemberUpdateDto;
+import com.example.space.data.enums.HealthStatus;
 import com.example.space.data.model.CrewMember;
 import com.example.space.exception.error.EntityNotFoundException;
 import com.example.space.mapper.CrewMemberMapper;
@@ -39,8 +40,8 @@ public class CrewMemberService {
         return crewMemberMapper.toDto(entity);
     }
 
-    public List<CrewMemberResponseDto> getAllCrewMembers() {
-        return crewMemberDao.findAll().stream()
+    public List<CrewMemberResponseDto> getAllCrewMembers(String search, HealthStatus status) {
+        return crewMemberDao.findAll(search, status).stream()
                 .map(crewMemberMapper::toDto)
                 .collect(Collectors.toList());
     }

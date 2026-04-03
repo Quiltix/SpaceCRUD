@@ -1,5 +1,6 @@
 package com.example.space.dao;
 
+import com.example.space.data.enums.HealthStatus;
 import com.example.space.data.model.CrewMember;
 
 import java.util.List;
@@ -10,7 +11,7 @@ public interface CrewMemberDao {
 
     Optional<CrewMember> findById(Integer id);
 
-    List<CrewMember> findAll();
+    List<CrewMember> findAll(String search, HealthStatus status);
 
     boolean existsByFirstNameAndLastName(String firstName, String lastName);
 

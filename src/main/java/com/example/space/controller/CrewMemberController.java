@@ -3,6 +3,7 @@ package com.example.space.controller;
 import com.example.space.data.dto.crewmember.CrewMemberCreateDto;
 import com.example.space.data.dto.crewmember.CrewMemberResponseDto;
 import com.example.space.data.dto.crewmember.CrewMemberUpdateDto;
+import com.example.space.data.enums.HealthStatus;
 import com.example.space.service.CrewMemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -29,8 +30,11 @@ public class CrewMemberController {
 
     // 2. READ ALL (GET)
     @GetMapping
-    public ResponseEntity<List<CrewMemberResponseDto>> getAllCrewMembers() {
-        List<CrewMemberResponseDto> list = crewMemberService.getAllCrewMembers();
+    public ResponseEntity<List<CrewMemberResponseDto>> getAllCrewMembers(
+            @RequestParam(required = false) HealthStatus status,
+            @RequestParam(required = false) String search
+            ) {
+        List<CrewMemberResponseDto> list = crewMemberService.getAllCrewMembers(search, status);
         return ResponseEntity.ok(list);
     }
 
