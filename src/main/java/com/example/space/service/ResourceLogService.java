@@ -8,6 +8,7 @@ import com.example.space.mapper.ResourceLogMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,8 +25,8 @@ public class ResourceLogService {
         return resourceLogMapper.toDto(entity);
     }
 
-    public List<ResourceLogResponseDto> getAllLogs() {
-        return resourceLogDao.findAll().stream()
+    public List<ResourceLogResponseDto> getAllLogs(Integer spacecraftId, Integer resourceId, LocalDate startDate, LocalDate endDate) {
+        return resourceLogDao.findAll(spacecraftId, resourceId, startDate, endDate).stream()
                 .map(resourceLogMapper::toDto)
                 .collect(Collectors.toList());
     }

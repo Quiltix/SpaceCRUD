@@ -7,10 +7,8 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.time.LocalDate;
+import java.util.*;
 
 @Repository
 public class ResourceLogDaoImpl implements ResourceLogDao {
@@ -64,9 +62,42 @@ public class ResourceLogDaoImpl implements ResourceLogDao {
     }
 
     @Override
-    public List<ResourceLog> findAll() {
-        String sql = "SELECT * FROM resource_logs ORDER BY timestamp DESC"; // Сортируем от новых к старым
-        return jdbcTemplate.query(sql, rowMapper);
+    public List<ResourceLog> findAll(Integer spacecraftId, Integer resourceId, LocalDate startDate, LocalDate endDate) {
+        StringBuilder sql = new StringBuilder("SELECT * FROM resource_logs");
+        List<Object> params = new ArrayList<>();
+        boolean hasWhere = false;
+
+        // 1. Фильтр по кораблю
+        if (spacecraftId != null) {
+            sql.append(" WHERE spacecraft_id = ?");
+            params.add(spacecraftId);
+            hasWhere = true;
+        }
+
+        // 2. Фильтр по ресурсу
+        if (resourceId != null) {
+            sql.append(hasWhere ? " AND " : " WHERE ");
+            sql.append("resource_id = ?");
+            params.add(resourceId);
+            hasWhere = true;
+        }
+
+        if (startDate != null) {
+            sql.append(hasWhere ? " AND " : " WHERE ");
+            sql.append("timestamp >= ?");
+            params.add(startDate.atStartOfDay());
+            hasWhere = true;
+        }
+
+        if (endDate != null) {
+            sql.append(hasWhere ? " AND " : " WHERE ");
+            sql.append("timestamp <= ?");
+            params.add(endDate.atTime(23, 59, 59));
+        }
+
+        sql.append(" ORDER BY timestamp DESC");
+
+        return jdbcTemplate.query(sql.toString(), rowMapper, params.toArray());
     }
 
     @Override

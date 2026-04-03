@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -17,14 +18,18 @@ public class ResourceLogController {
     private final ResourceLogService resourceLogService;
 
     @GetMapping
-    public ResponseEntity<List<ResourceLogResponseDto>> getAllLogs() {
-        List<ResourceLogResponseDto> list = resourceLogService.getAllLogs();
+    public ResponseEntity<List<ResourceLogResponseDto>> getAllLogs(
+            @RequestParam(required = false) Integer spacecraftId,
+            @RequestParam(required = false) Integer resourceId,
+            @RequestParam(required = false) LocalDate startDate,
+            @RequestParam(required = false) LocalDate endDate
+            ) {
+        List<ResourceLogResponseDto> list = resourceLogService.getAllLogs(spacecraftId, resourceId, startDate, endDate);
         return ResponseEntity.ok(list);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ResourceLogResponseDto> getLogById(@PathVariable Long id) {
-        // Обрати внимание: здесь Long, а не Integer
         ResourceLogResponseDto log = resourceLogService.getLogById(id);
         return ResponseEntity.ok(log);
     }
