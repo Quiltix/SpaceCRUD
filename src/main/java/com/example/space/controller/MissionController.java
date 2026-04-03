@@ -3,7 +3,9 @@ package com.example.space.controller;
 import com.example.space.data.dto.mission.MissionCreateDto;
 import com.example.space.data.dto.mission.MissionResponseDto;
 import com.example.space.data.dto.mission.MissionUpdateDto;
+import com.example.space.data.enums.MissionStatus;
 import com.example.space.service.MissionService;
+import io.swagger.v3.oas.models.security.SecurityScheme;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -30,8 +32,13 @@ public class MissionController {
 
     // 2. READ ALL (GET)
     @GetMapping
-    public ResponseEntity<List<MissionResponseDto>> getAllMissions() {
-        List<MissionResponseDto> list = missionService.getAllMissions();
+    public ResponseEntity<List<MissionResponseDto>> getAllMissions(
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) Integer spacecraftId,
+            @RequestParam(required = false) MissionStatus missionStatus
+
+    ) {
+        List<MissionResponseDto> list = missionService.getAllMissions(search, spacecraftId, missionStatus);
         return ResponseEntity.ok(list);
     }
 

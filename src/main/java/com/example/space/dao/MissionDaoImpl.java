@@ -1,7 +1,6 @@
 package com.example.space.dao;
 
 import com.example.space.data.enums.MissionStatus;
-import com.example.space.data.enums.SpacecraftStatus;
 import com.example.space.data.model.Mission;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -12,10 +11,7 @@ import org.springframework.stereotype.Repository;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Repository
 @RequiredArgsConstructor
@@ -85,9 +81,39 @@ public class MissionDaoImpl implements MissionDao {
     }
 
     @Override
-    public List<Mission> findAll() {
-        String sql = "SELECT * FROM missions";
-        return jdbcTemplate.query(sql, rowMapper);
+    public List<Mission> findAll(String search, Integer spacecraftId, MissionStatus missionStatus) {
+        StringBuilder sql = new StringBuilder("SELECT * FROM missions");
+        List<Object> params = new ArrayList<>();
+        boolean hasWhere = false;
+
+        // 1. Фильтр по статусу миссии
+        if (missionStatus != null) {
+            sql.append(" WHERE mission_status = ?");
+            params.add(missionStatus.name());
+            hasWhere = true;
+        }
+
+        // 2. Фильтр по ID космического корабля
+        if (spacecraftId != null) {
+            sql.append(hasWhere ? " AND " : " WHERE ");
+            sql.append("spacecraft_id = ?");
+            params.add(spacecraftId);
+            hasWhere = true;
+        }
+
+        // 3. Поиск по названию (name) и целям (objectives)
+        if (search != null && !search.trim().isEmpty()) {
+            String searchPattern = "%" + search.trim() + "%";
+
+            sql.append(hasWhere ? " AND " : " WHERE ");
+            // ILIKE для поиска без учета регистра
+            sql.append("(name ILIKE ? OR objectives ILIKE ?)");
+
+            params.add(searchPattern);
+            params.add(searchPattern);
+        }
+
+        return jdbcTemplate.query(sql.toString(), rowMapper, params.toArray());
     }
 
     @Override

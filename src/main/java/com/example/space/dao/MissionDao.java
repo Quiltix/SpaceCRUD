@@ -1,5 +1,6 @@
 package com.example.space.dao;
 
+import com.example.space.data.enums.MissionStatus;
 import com.example.space.data.model.Mission;
 
 import java.util.List;
@@ -10,7 +11,7 @@ public interface MissionDao {
 
     Optional<Mission> findById(Integer id);
 
-    List<Mission> findAll();
+    List<Mission> findAll(String search, Integer spacecraftId, MissionStatus missionStatus);
 
     boolean existsByNameAndSpacecraftId(String name, Integer spacecraftId);
 
