@@ -1,5 +1,6 @@
 package com.example.space.data.dto.experiment;
 
+
 import com.example.space.data.enums.ExperimentStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotBlank;
@@ -11,15 +12,15 @@ import java.time.LocalDateTime;
 @Data
 public class ExperimentCreateDto {
     @NotBlank(message = "Name is mandatory")
-    @Size(max =100)
+    @Size(max = 150)
     private String name;
 
     private Integer missionId;
 
-    @Size(max =500)
+    @Size(max = 500)
     private String description;
 
-    private ExperimentStatus experimentStatus; // Если null, сервис поставит дефолт
+    private ExperimentStatus experimentStatus;
 
     private Integer responsibleMemberId;
 

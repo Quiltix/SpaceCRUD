@@ -24,7 +24,6 @@ public class CrewMemberService {
 
     @Transactional
     public CrewMemberResponseDto createCrewMember(CrewMemberCreateDto createDto) {
-        // Бизнес-логика: Проверка на уникальность по имени и фамилии
         if (crewMemberDao.existsByFirstNameAndLastName(createDto.getFirstName(), createDto.getLastName())) {
             throw new IllegalArgumentException("Crew member with name '" + createDto.getFirstName() + " " + createDto.getLastName() + "' already exists");
         }
@@ -59,7 +58,6 @@ public class CrewMemberService {
 
     @Transactional
     public void deleteCrewMember(Integer id) {
-        // Проверяем, существует ли член экипажа перед удалением
         if (crewMemberDao.findById(id).isEmpty()) {
             throw new EntityNotFoundException("Crew member not found with id: " + id);
         }
