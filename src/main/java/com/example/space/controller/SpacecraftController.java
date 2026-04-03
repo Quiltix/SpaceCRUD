@@ -37,8 +37,9 @@ public class SpacecraftController {
 
     // 2. READ ALL (GET)
     @GetMapping
-    public ResponseEntity<List<SpacecraftResponseDto>> getAllSpacecrafts(@RequestParam(required = false) SpacecraftStatus status) {
-        List<SpacecraftResponseDto> list = spacecraftService.getAllSpacecrafts(status);
+    public ResponseEntity<List<SpacecraftResponseDto>> getAllSpacecrafts(@RequestParam(required = false) SpacecraftStatus status,
+                                                                         @RequestParam(required = false) String search) {
+        List<SpacecraftResponseDto> list = spacecraftService.getAllSpacecrafts(status, search);
 
         return ResponseEntity.ok(list);
     }

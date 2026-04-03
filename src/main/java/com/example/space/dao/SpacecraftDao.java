@@ -13,7 +13,7 @@ public interface SpacecraftDao {
     // Чтение
     Optional<Spacecraft> findById(Integer id);
 
-    List<Spacecraft> findAll(SpacecraftStatus status);
+    List<Spacecraft> findAll(SpacecraftStatus status, String search);
 
     boolean existsByName(String name);
 

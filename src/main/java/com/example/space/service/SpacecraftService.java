@@ -43,8 +43,8 @@ public class SpacecraftService {
         return spacecraftMapper.toDto(entity);
     }
 
-    public List<SpacecraftResponseDto> getAllSpacecrafts(SpacecraftStatus status) {
-        return spacecraftDao.findAll(status).stream()
+    public List<SpacecraftResponseDto> getAllSpacecrafts(SpacecraftStatus status, String search) {
+        return spacecraftDao.findAll(status, search).stream()
                 .map(spacecraftMapper::toDto)
                 .collect(Collectors.toList());
     }

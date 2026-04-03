@@ -11,10 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Repository
 @RequiredArgsConstructor
@@ -82,13 +79,36 @@ public class SpacecraftDaoImpl implements SpacecraftDao {
     }
 
     @Override
-    public List<Spacecraft> findAll(SpacecraftStatus status) {
-        if (status == null){
-            String sql = "SELECT * FROM spacecraft";
-            return jdbcTemplate.query(sql, rowMapper);
+    public List<Spacecraft> findAll(SpacecraftStatus status, String search) {
+        StringBuilder sql = new StringBuilder("SELECT * FROM spacecraft");
+        List<Object> params = new ArrayList<>();
+
+        boolean hasWhere = false;
+
+        if (status != null) {
+            sql.append(" WHERE spacecraft_status = ?");
+            params.add(status.name());
+            hasWhere = true;
         }
-        String sql = "SELECT * FROM spacecraft where spacecraft_status = ?";
-        return jdbcTemplate.query(sql, rowMapper,status.name());
+
+        if (search != null && !search.trim().isEmpty()) {
+            String searchPattern = "%" + search.trim() + "%";
+
+            if (hasWhere) {
+                sql.append(" AND ");
+            } else {
+                sql.append(" WHERE ");
+            }
+
+            sql.append("(name ILIKE ? OR model ILIKE ? OR current_location ILIKE ? OR specifications ILIKE ?)");
+
+            params.add(searchPattern);
+            params.add(searchPattern);
+            params.add(searchPattern);
+            params.add(searchPattern);
+        }
+
+        return jdbcTemplate.query(sql.toString(), rowMapper, params.toArray());
     }
 
     @Override
