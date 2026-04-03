@@ -10,10 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Repository
 @RequiredArgsConstructor
@@ -88,9 +85,43 @@ public class ExperimentDaoImpl implements ExperimentDao {
     }
 
     @Override
-    public List<Experiment> findAll() {
-        String sql = "SELECT * FROM experiments";
-        return jdbcTemplate.query(sql, rowMapper);
+    public List<Experiment> findAll(String search, Integer missionId, ExperimentStatus status, Integer responsibleMemberId) {
+        StringBuilder sql = new StringBuilder("SELECT * FROM experiments");
+        List<Object> params = new ArrayList<>();
+        boolean hasWhere = false;
+
+        if (status != null) {
+            sql.append(" WHERE experiment_status = ?");
+            params.add(status.name());
+            hasWhere = true;
+        }
+
+        if (missionId != null) {
+            sql.append(hasWhere ? " AND " : " WHERE ");
+            sql.append("mission_id = ?");
+            params.add(missionId);
+            hasWhere = true;
+        }
+
+        if (responsibleMemberId != null) {
+            sql.append(hasWhere ? " AND " : " WHERE ");
+            sql.append("responsible_member_id = ?");
+            params.add(responsibleMemberId);
+            hasWhere = true;
+        }
+
+        if (search != null && !search.trim().isEmpty()) {
+            String searchPattern = "%" + search.trim() + "%";
+
+            sql.append(hasWhere ? " AND " : " WHERE ");
+            sql.append("(name ILIKE ? OR description ILIKE ? OR results ILIKE ?)");
+
+            params.add(searchPattern);
+            params.add(searchPattern);
+            params.add(searchPattern);
+        }
+
+        return jdbcTemplate.query(sql.toString(), rowMapper, params.toArray());
     }
 
     @Override

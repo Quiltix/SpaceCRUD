@@ -3,6 +3,7 @@ package com.example.space.controller;
 import com.example.space.data.dto.experiment.ExperimentCreateDto;
 import com.example.space.data.dto.experiment.ExperimentResponseDto;
 import com.example.space.data.dto.experiment.ExperimentUpdateDto;
+import com.example.space.data.enums.ExperimentStatus;
 import com.example.space.mapper.ExperimentMapper;
 import com.example.space.service.ExperimentService;
 import jakarta.validation.Valid;
@@ -31,8 +32,13 @@ public class ExperimentController {
 
     // 2. READ ALL (GET)
     @GetMapping
-    public ResponseEntity<List<ExperimentResponseDto>> getAllExperiments() {
-        List<ExperimentResponseDto> list = experimentService.getAllExperiments();
+    public ResponseEntity<List<ExperimentResponseDto>> getAllExperiments(
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) Integer missionId,
+            @RequestParam(required = false) ExperimentStatus status,
+            @RequestParam(required = false) Integer responsibleMemberId
+            ) {
+        List<ExperimentResponseDto> list = experimentService.getAllExperiments(search, missionId, status, responsibleMemberId);
         return ResponseEntity.ok(list);
     }
 

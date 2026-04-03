@@ -4,6 +4,7 @@ import com.example.space.dao.ExperimentDao;
 import com.example.space.data.dto.experiment.ExperimentCreateDto;
 import com.example.space.data.dto.experiment.ExperimentResponseDto;
 import com.example.space.data.dto.experiment.ExperimentUpdateDto;
+import com.example.space.data.enums.ExperimentStatus;
 import com.example.space.data.model.Experiment;
 import com.example.space.exception.error.EntityNotFoundException;
 import com.example.space.mapper.ExperimentMapper;
@@ -34,8 +35,8 @@ public class ExperimentService {
         return experimentMapper.toDto(entity);
     }
 
-    public List<ExperimentResponseDto> getAllExperiments() {
-        return experimentDao.findAll().stream()
+    public List<ExperimentResponseDto> getAllExperiments(String search, Integer missionId, ExperimentStatus status, Integer responsibleMemberId) {
+        return experimentDao.findAll(search, missionId, status, responsibleMemberId).stream()
                 .map(experimentMapper::toDto)
                 .collect(Collectors.toList());
     }

@@ -1,5 +1,6 @@
 package com.example.space.dao;
 
+import com.example.space.data.enums.ExperimentStatus;
 import com.example.space.data.model.Experiment;
 
 import java.util.List;
@@ -10,7 +11,7 @@ public interface ExperimentDao {
 
     Optional<Experiment> findById(Integer id);
 
-    List<Experiment> findAll();
+    List<Experiment> findAll(String search, Integer missionId, ExperimentStatus status, Integer responsibleMemberId);
 
     void update(Experiment experiment);
 
