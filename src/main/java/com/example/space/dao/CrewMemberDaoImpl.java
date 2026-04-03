@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.*;
 
 @Repository
@@ -68,7 +69,7 @@ public class CrewMemberDaoImpl implements CrewMemberDao {
     }
 
     @Override
-    public List<CrewMember> findAll(String search, HealthStatus status) {
+    public List<CrewMember> findAll(String search, HealthStatus status, LocalDate startDate, LocalDate endDate) {
         StringBuilder sql = new StringBuilder("SELECT * FROM crew_members");
         List<Object> params = new ArrayList<>();
         boolean hasWhere = false;
@@ -81,13 +82,25 @@ public class CrewMemberDaoImpl implements CrewMemberDao {
 
         if (search != null && !search.trim().isEmpty()) {
             String searchPattern = "%" + search.trim() + "%";
-
             sql.append(hasWhere ? " AND " : " WHERE ");
             sql.append("(first_name ILIKE ? OR last_name ILIKE ? OR specialization ILIKE ?)");
+            params.add(searchPattern);
+            params.add(searchPattern);
+            params.add(searchPattern);
+            hasWhere = true;
+        }
 
-            params.add(searchPattern);
-            params.add(searchPattern);
-            params.add(searchPattern);
+        if (startDate != null) {
+            sql.append(hasWhere ? " AND " : " WHERE ");
+            sql.append("birth_date >= ?");
+            params.add(startDate);
+            hasWhere = true;
+        }
+
+        if (endDate != null) {
+            sql.append(hasWhere ? " AND " : " WHERE ");
+            sql.append("birth_date <= ?");
+            params.add(endDate);
         }
 
         return jdbcTemplate.query(sql.toString(), rowMapper, params.toArray());

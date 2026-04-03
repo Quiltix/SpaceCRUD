@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,8 +41,8 @@ public class CrewMemberService {
         return crewMemberMapper.toDto(entity);
     }
 
-    public List<CrewMemberResponseDto> getAllCrewMembers(String search, HealthStatus status) {
-        return crewMemberDao.findAll(search, status).stream()
+    public List<CrewMemberResponseDto> getAllCrewMembers(String search, HealthStatus status, LocalDate startDate, LocalDate endDate) {
+        return crewMemberDao.findAll(search, status, startDate, endDate).stream()
                 .map(crewMemberMapper::toDto)
                 .collect(Collectors.toList());
     }

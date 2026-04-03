@@ -5,12 +5,14 @@ import com.example.space.data.dto.crewmember.CrewMemberResponseDto;
 import com.example.space.data.dto.crewmember.CrewMemberUpdateDto;
 import com.example.space.data.enums.HealthStatus;
 import com.example.space.service.CrewMemberService;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -32,9 +34,11 @@ public class CrewMemberController {
     @GetMapping
     public ResponseEntity<List<CrewMemberResponseDto>> getAllCrewMembers(
             @RequestParam(required = false) HealthStatus status,
-            @RequestParam(required = false) String search
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) @Schema(example = "2006-09-28") LocalDate startDate,
+            @RequestParam(required = false) @Schema(example = "2006-09-28") LocalDate endDate
             ) {
-        List<CrewMemberResponseDto> list = crewMemberService.getAllCrewMembers(search, status);
+        List<CrewMemberResponseDto> list = crewMemberService.getAllCrewMembers(search, status, startDate, endDate);
         return ResponseEntity.ok(list);
     }
 
