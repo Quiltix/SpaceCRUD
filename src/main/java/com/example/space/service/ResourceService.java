@@ -8,6 +8,7 @@ import com.example.space.data.dto.resource.ResourceResponseDto;
 import com.example.space.data.dto.resource.ResourceUpdateDto;
 import com.example.space.data.model.Resource;
 import com.example.space.data.model.ResourceLog;
+import com.example.space.exception.error.EntityNotFoundException;
 import com.example.space.mapper.ResourceMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -34,7 +35,7 @@ public class ResourceService {
 
     public ResourceResponseDto getResourceById(Integer id) {
         Resource entity = resourceDao.findById(id)
-                .orElseThrow(() -> new RuntimeException("Resource not found with id: " + id));
+                .orElseThrow(() -> new EntityNotFoundException("Resource not found with id: " + id));
         return resourceMapper.toDto(entity);
     }
 
@@ -47,7 +48,7 @@ public class ResourceService {
     @Transactional
     public ResourceResponseDto updateResource(Integer id, ResourceUpdateDto updateDto) {
         Resource existingEntity = resourceDao.findById(id)
-                .orElseThrow(() -> new RuntimeException("Resource not found with id: " + id));
+                .orElseThrow(() -> new EntityNotFoundException("Resource not found with id: " + id));
 
         resourceMapper.updateEntityFromDto(updateDto, existingEntity);
         resourceDao.update(existingEntity);
@@ -65,7 +66,7 @@ public class ResourceService {
     @Transactional
     public ResourceResponseDto changeQuantity(Integer id, ResourceChangeDto changeDto) {
         Resource resource = resourceDao.findById(id)
-                .orElseThrow(() -> new RuntimeException("Resource not found with id: " + id));
+                .orElseThrow(() -> new EntityNotFoundException("Resource not found with id: " + id));
 
         BigDecimal currentQty = resource.getCurrentQuantity();
         BigDecimal changeQty = changeDto.getQuantityChange();

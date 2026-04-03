@@ -73,13 +73,12 @@ public class ResourceDaoImpl implements ResourceDao {
 
     @Override
     public void update(Resource resource) {
-        String sql = "UPDATE resources SET spacecraft_id = ?, resource_type_id = ?, current_quantity = ?, " +
+        String sql = "UPDATE resources SET spacecraft_id = ?, resource_type_id = ?, " +
                 "max_capacity = ?, unit = ?, last_updated = ? WHERE id = ?";
 
         jdbcTemplate.update(sql,
                 resource.getSpacecraftId(),
                 resource.getResourceTypeId(),
-                resource.getCurrentQuantity(),
                 resource.getMaxCapacity(),
                 resource.getUnit(),
                 resource.getLastUpdated(),

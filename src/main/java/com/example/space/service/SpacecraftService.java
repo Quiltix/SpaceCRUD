@@ -5,6 +5,7 @@ import com.example.space.dao.SpacecraftDao;
 import com.example.space.data.dto.spacecraft.SpacecraftCreateDto;
 import com.example.space.data.dto.spacecraft.SpacecraftResponseDto;
 import com.example.space.data.dto.spacecraft.SpacecraftUpdateDto;
+import com.example.space.data.enums.SpacecraftStatus;
 import com.example.space.data.model.Spacecraft;
 import com.example.space.exception.error.EntityNotFoundException;
 import com.example.space.mapper.SpacecraftMapper;
@@ -42,8 +43,8 @@ public class SpacecraftService {
         return spacecraftMapper.toDto(entity);
     }
 
-    public List<SpacecraftResponseDto> getAllSpacecrafts() {
-        return spacecraftDao.findAll().stream()
+    public List<SpacecraftResponseDto> getAllSpacecrafts(SpacecraftStatus status) {
+        return spacecraftDao.findAll(status).stream()
                 .map(spacecraftMapper::toDto)
                 .collect(Collectors.toList());
     }

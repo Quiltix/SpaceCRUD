@@ -25,7 +25,6 @@ public class ResourceMapper {
  public void updateEntityFromDto(ResourceUpdateDto dto, Resource entity) {
   if (dto.getSpacecraftId() != null) entity.setSpacecraftId(dto.getSpacecraftId());
   if (dto.getResourceTypeId() != null) entity.setResourceTypeId(dto.getResourceTypeId());
-  if (dto.getCurrentQuantity() != null) entity.setCurrentQuantity(dto.getCurrentQuantity());
   if (dto.getMaxCapacity() != null) entity.setMaxCapacity(dto.getMaxCapacity());
   if (dto.getUnit() != null) entity.setUnit(dto.getUnit());
   // lastUpdated обычно обновляется только при изменении количества,

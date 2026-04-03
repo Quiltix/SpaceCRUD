@@ -1,5 +1,6 @@
 package com.example.space.dao;
 
+import com.example.space.data.enums.SpacecraftStatus;
 import com.example.space.data.model.Spacecraft;
 
 import java.util.List;
@@ -12,7 +13,7 @@ public interface SpacecraftDao {
     // Чтение
     Optional<Spacecraft> findById(Integer id);
 
-    List<Spacecraft> findAll();
+    List<Spacecraft> findAll(SpacecraftStatus status);
 
     boolean existsByName(String name);
 

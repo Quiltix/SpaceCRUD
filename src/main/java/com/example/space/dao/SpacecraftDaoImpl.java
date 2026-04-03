@@ -82,9 +82,13 @@ public class SpacecraftDaoImpl implements SpacecraftDao {
     }
 
     @Override
-    public List<Spacecraft> findAll() {
-        String sql = "SELECT * FROM spacecraft";
-        return jdbcTemplate.query(sql, rowMapper);
+    public List<Spacecraft> findAll(SpacecraftStatus status) {
+        if (status == null){
+            String sql = "SELECT * FROM spacecraft";
+            return jdbcTemplate.query(sql, rowMapper);
+        }
+        String sql = "SELECT * FROM spacecraft where spacecraft_status = ?";
+        return jdbcTemplate.query(sql, rowMapper,status.name());
     }
 
     @Override

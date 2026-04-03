@@ -13,9 +13,6 @@ public class ResourceUpdateDto {
 
  private Integer resourceTypeId;
 
- @Positive(message = "Current quantity must be positive")
- private BigDecimal currentQuantity;
-
  @Positive(message = "Max capacity must be positive")
  private BigDecimal maxCapacity;
 

@@ -4,7 +4,6 @@ import com.example.space.data.dto.resource.ResourceChangeDto;
 import com.example.space.data.dto.resource.ResourceCreateDto;
 import com.example.space.data.dto.resource.ResourceResponseDto;
 import com.example.space.data.dto.resource.ResourceUpdateDto;
-import com.example.space.mapper.ResourceMapper;
 import com.example.space.service.ResourceService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

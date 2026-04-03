@@ -4,8 +4,10 @@ package com.example.space.controller;
 import com.example.space.data.dto.spacecraft.SpacecraftCreateDto;
 import com.example.space.data.dto.spacecraft.SpacecraftResponseDto;
 import com.example.space.data.dto.spacecraft.SpacecraftUpdateDto;
+import com.example.space.data.enums.SpacecraftStatus;
 import com.example.space.mapper.SpacecraftMapper;
 import com.example.space.service.SpacecraftService;
+import jakarta.annotation.Nullable;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,7 +22,6 @@ import java.util.List;
 public class SpacecraftController {
 
     private final SpacecraftService spacecraftService;
-    private final SpacecraftMapper spacecraftMapper;
 
     // 1. CREATE (POST)
     @PostMapping
@@ -36,8 +37,8 @@ public class SpacecraftController {
 
     // 2. READ ALL (GET)
     @GetMapping
-    public ResponseEntity<List<SpacecraftResponseDto>> getAllSpacecrafts() {
-        List<SpacecraftResponseDto> list = spacecraftService.getAllSpacecrafts();
+    public ResponseEntity<List<SpacecraftResponseDto>> getAllSpacecrafts(@RequestParam(required = false) SpacecraftStatus status) {
+        List<SpacecraftResponseDto> list = spacecraftService.getAllSpacecrafts(status);
 
         return ResponseEntity.ok(list);
     }
