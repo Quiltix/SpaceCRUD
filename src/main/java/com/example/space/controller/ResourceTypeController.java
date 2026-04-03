@@ -27,8 +27,8 @@ public class ResourceTypeController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ResourceTypeResponseDto>> getAllResourceTypes() {
-        List<ResourceTypeResponseDto> types = resourceTypeService.getAllResourceTypes();
+    public ResponseEntity<List<ResourceTypeResponseDto>> getAllResourceTypes(@RequestParam(required = false) String search) {
+        List<ResourceTypeResponseDto> types = resourceTypeService.getAllResourceTypes(search);
         return ResponseEntity.ok(types);
     }
 

@@ -8,11 +8,9 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Repository
 @RequiredArgsConstructor
@@ -66,9 +64,38 @@ public class ResourceDaoImpl implements ResourceDao {
     }
 
     @Override
-    public List<Resource> findAll() {
-        String sql = "SELECT * FROM resources";
-        return jdbcTemplate.query(sql, rowMapper);
+    public List<Resource> findAll(BigDecimal maxCurrentQuantity, Integer resourceTypeId, Integer spacecraftId, LocalDate lastUpdated) {
+        StringBuilder sql = new StringBuilder("SELECT * FROM resources");
+        List<Object> params = new ArrayList<>();
+        boolean hasWhere = false;
+
+        if (maxCurrentQuantity != null) {
+            sql.append(" WHERE current_quantity <= ?");
+            params.add(maxCurrentQuantity);
+            hasWhere = true;
+        }
+
+        if (resourceTypeId != null) {
+            sql.append(hasWhere ? " AND " : " WHERE ");
+            sql.append("resource_type_id = ?");
+            params.add(resourceTypeId);
+            hasWhere = true;
+        }
+
+        if (spacecraftId != null) {
+            sql.append(hasWhere ? " AND " : " WHERE ");
+            sql.append("spacecraft_id = ?");
+            params.add(spacecraftId);
+            hasWhere = true;
+        }
+
+        if (lastUpdated != null) {
+            sql.append(hasWhere ? " AND " : " WHERE ");
+            sql.append("cast(last_updated as date) = ?");
+            params.add(lastUpdated);
+        }
+
+        return jdbcTemplate.query(sql.toString(), rowMapper, params.toArray());
     }
 
     @Override

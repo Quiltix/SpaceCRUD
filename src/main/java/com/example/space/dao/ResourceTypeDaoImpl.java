@@ -7,8 +7,6 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,9 +51,17 @@ public class ResourceTypeDaoImpl implements ResourceTypeDao {
     }
 
     @Override
-    public List<ResourceType> findAll() {
-        String sql = "SELECT * FROM resource_types ORDER BY name";
-        return jdbcTemplate.query(sql, rowMapper);
+    public List<ResourceType> findAll(String search) {
+
+        String sql = "SELECT * FROM resource_types";
+        if (search != null && !search.trim().isEmpty()) {
+            sql += " WHERE name ILIKE ? ORDER BY name";
+            return jdbcTemplate.query(sql, rowMapper, "%" + search + "%");
+
+
+        }
+
+        return jdbcTemplate.query(sql += " ORDER BY name", rowMapper);
     }
 
     @Override

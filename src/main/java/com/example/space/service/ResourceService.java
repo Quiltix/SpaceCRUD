@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -39,8 +40,8 @@ public class ResourceService {
         return resourceMapper.toDto(entity);
     }
 
-    public List<ResourceResponseDto> getAllResources() {
-        return resourceDao.findAll().stream()
+    public List<ResourceResponseDto> getAllResources(BigDecimal maxCurrentQuantity, Integer resourceTypeId, Integer spacecraftId, LocalDate lastUpdated) {
+        return resourceDao.findAll(maxCurrentQuantity, resourceTypeId, spacecraftId, lastUpdated).stream()
                 .map(resourceMapper::toDto)
                 .collect(Collectors.toList());
     }

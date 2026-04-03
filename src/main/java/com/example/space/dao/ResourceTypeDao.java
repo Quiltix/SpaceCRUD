@@ -10,7 +10,7 @@ public interface ResourceTypeDao {
 
     Optional<ResourceType> findById(Integer id);
 
-    List<ResourceType> findAll();
+    List<ResourceType> findAll(String search);
 
     boolean existsByName(String name);
 

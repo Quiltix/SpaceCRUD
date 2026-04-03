@@ -38,8 +38,8 @@ public class ResourceTypeService {
         return resourceTypeMapper.toDto(entity);
     }
 
-    public List<ResourceTypeResponseDto> getAllResourceTypes() {
-        return resourceTypeDao.findAll().stream()
+    public List<ResourceTypeResponseDto> getAllResourceTypes(String search) {
+        return resourceTypeDao.findAll(search).stream()
                 .map(resourceTypeMapper::toDto)
                 .collect(Collectors.toList());
     }

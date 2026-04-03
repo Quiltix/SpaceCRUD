@@ -5,12 +5,15 @@ import com.example.space.data.dto.resource.ResourceCreateDto;
 import com.example.space.data.dto.resource.ResourceResponseDto;
 import com.example.space.data.dto.resource.ResourceUpdateDto;
 import com.example.space.service.ResourceService;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -30,8 +33,14 @@ public class ResourceController {
 
     // 2. READ ALL (GET)
     @GetMapping
-    public ResponseEntity<List<ResourceResponseDto>> getAllResources() {
-        List<ResourceResponseDto> list = resourceService.getAllResources();
+    public ResponseEntity<List<ResourceResponseDto>> getAllResources(
+            @RequestParam(required = false)BigDecimal maxCurrentQuantity,
+            @RequestParam(required = false) Integer resourceTypeId,
+            @RequestParam(required = false) Integer spacecraftId,
+            @RequestParam(required = false) @Schema(example = "2026-03-26") LocalDate lastUpdated
+
+            ) {
+        List<ResourceResponseDto> list = resourceService.getAllResources(maxCurrentQuantity, resourceTypeId, spacecraftId, lastUpdated);
         return ResponseEntity.ok(list);
     }
 
