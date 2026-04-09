@@ -1,3 +1,5 @@
 databaseChangeLog:
   - include:
       file: classpath:db/changelog/sql/001-init-tables.sql
+  - include:
+      file: classpath:db/changelog/sql/002-add-performance-indexes.sql
