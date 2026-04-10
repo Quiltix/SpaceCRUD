@@ -12,7 +12,7 @@ create table if not exists spacecraft (
 
 create table if not exists missions (
     id SERIAL PRIMARY KEY,
-    spacecraft_id INT NOT NULL REFERENCES spacecraft(id),
+    spacecraft_id INT NOT NULL REFERENCES spacecraft(id) ON DELETE CASCADE,
     name VARCHAR(150) NOT NULL,
     start_date TIMESTAMPTZ NOT NULL,
     end_date TIMESTAMPTZ,
@@ -32,8 +32,8 @@ create table if not exists crew_members (
 
 
 create table if not exists mission_crew (
-    mission_id INT REFERENCES missions(id),
-    member_id INT REFERENCES crew_members(id),
+    mission_id INT REFERENCES missions(id) ON DELETE CASCADE,
+    member_id INT REFERENCES crew_members(id) ON DELETE CASCADE,
     role_in_mission VARCHAR(50),
     join_date TIMESTAMPTZ,
     PRIMARY KEY (mission_id, member_id)
@@ -42,11 +42,11 @@ create table if not exists mission_crew (
 -- 5. Эксперименты
 create table if not exists experiments (
     id SERIAL PRIMARY KEY,
-    mission_id INT NOT NULL REFERENCES missions(id),
+    mission_id INT NOT NULL REFERENCES missions(id) ON DELETE CASCADE,
     name VARCHAR(150) NOT NULL,
     description TEXT,
     experiment_status varchar(100),
-    responsible_member_id INT REFERENCES crew_members(id),
+    responsible_member_id INT REFERENCES crew_members(id) ON DELETE CASCADE,
     start_time TIMESTAMPTZ,
     end_time TIMESTAMPTZ,
     results text
@@ -58,8 +58,8 @@ create table if not exists resource_types (
 -- 6. Ресурсы (Учет текущих запасов на аппарате)
 create table if not exists resources (
     id SERIAL PRIMARY KEY,
-    spacecraft_id INT NOT NULL REFERENCES spacecraft(id),
-    resource_type_id INT REFERENCES resource_types(id),
+    spacecraft_id INT NOT NULL REFERENCES spacecraft(id) ON DELETE CASCADE,
+    resource_type_id INT REFERENCES resource_types(id) ON DELETE CASCADE,
     current_quantity DECIMAL(12, 3) NOT NULL,
     max_capacity DECIMAL(12, 3) NOT NULL,
     unit VARCHAR(20),
@@ -68,8 +68,8 @@ create table if not exists resources (
 
 create table if not exists resource_logs (
     id BIGSERIAL PRIMARY KEY,
-    spacecraft_id INT NOT NULL REFERENCES spacecraft(id),
-    resource_id INT REFERENCES resources(id),
+    spacecraft_id INT NOT NULL REFERENCES spacecraft(id) ON DELETE CASCADE,
+    resource_id INT REFERENCES resources(id) ON DELETE CASCADE,
     quantity_change DECIMAL(12, 3),
     timestamp TIMESTAMPTZ
 );
