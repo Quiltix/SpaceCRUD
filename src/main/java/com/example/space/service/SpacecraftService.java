@@ -7,6 +7,7 @@ import com.example.space.data.dto.spacecraft.SpacecraftResponseDto;
 import com.example.space.data.dto.spacecraft.SpacecraftUpdateDto;
 import com.example.space.data.enums.SpacecraftStatus;
 import com.example.space.data.model.Spacecraft;
+import com.example.space.exception.error.EntityAlreadyExists;
 import com.example.space.exception.error.EntityNotFoundException;
 import com.example.space.mapper.SpacecraftMapper;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +28,7 @@ public class SpacecraftService {
     public SpacecraftResponseDto createSpacecraft(SpacecraftCreateDto createDto) {
         // 1. Бизнес-логика: Проверка уникальности имени
         if (spacecraftDao.existsByName(createDto.getName())) {
-            throw new IllegalArgumentException("Spacecraft with name '" + createDto.getName() + "' already exists");
+            throw new EntityAlreadyExists("Spacecraft with name '" + createDto.getName() + "' already exists");
         }
 
         Spacecraft entity = spacecraftMapper.toEntity(createDto);

@@ -1,6 +1,7 @@
 package com.example.space.exception;
 
 
+import com.example.space.exception.error.EntityAlreadyExists;
 import com.example.space.exception.error.EntityNotFoundException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -28,6 +29,27 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         ErrorResponseDto errorResponse = new ErrorResponseDto(
                 HttpStatus.NOT_FOUND.value(),
                 "Entity Not Found",
+                Collections.singletonList(ex.getMessage())
+        );
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ErrorResponseDto> handleIllegalArgument(IllegalArgumentException ex, WebRequest request) {
+        ErrorResponseDto errorResponse = new ErrorResponseDto(
+                HttpStatus.BAD_REQUEST.value(),
+                "Конфликт",
+                Collections.singletonList(ex.getMessage())
+        );
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
+
+    // Обработчик для нашего кастомного исключения EntityNotFoundException
+    @ExceptionHandler(EntityAlreadyExists.class)
+    public ResponseEntity<ErrorResponseDto> handleAlreadyExists(EntityAlreadyExists ex, WebRequest request) {
+        ErrorResponseDto errorResponse = new ErrorResponseDto(
+                HttpStatus.BAD_REQUEST.value(),
+                "Конфликт имен",
                 Collections.singletonList(ex.getMessage())
         );
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
