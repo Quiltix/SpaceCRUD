@@ -15,6 +15,8 @@ public interface MissionDao {
 
     boolean existsByNameAndSpacecraftId(String name, Integer spacecraftId);
 
+    boolean existsBySpacecraftId(Integer spacecraftId);
+
     void update(Mission mission);
 
     void deleteById(Integer id);

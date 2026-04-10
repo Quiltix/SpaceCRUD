@@ -1,6 +1,7 @@
 package com.example.space.service;
 
 
+import com.example.space.dao.MissionDao;
 import com.example.space.dao.SpacecraftDao;
 import com.example.space.data.dto.spacecraft.SpacecraftCreateDto;
 import com.example.space.data.dto.spacecraft.SpacecraftResponseDto;
@@ -22,6 +23,7 @@ import java.util.stream.Collectors;
 public class SpacecraftService {
 
     private final SpacecraftDao spacecraftDao;
+    private final MissionDao missionDao;
     private final SpacecraftMapper spacecraftMapper;
 
     @Transactional
@@ -64,6 +66,9 @@ public class SpacecraftService {
 
     @Transactional
     public void deleteSpacecraft(Integer id) {
+        if (missionDao.existsBySpacecraftId(id)){
+            throw new IllegalArgumentException("Mission with this spacecraft exists");
+        }
         spacecraftDao.deleteById(id);
     }
 

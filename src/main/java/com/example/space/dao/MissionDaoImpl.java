@@ -124,6 +124,13 @@ public class MissionDaoImpl implements MissionDao {
     }
 
     @Override
+    public boolean existsBySpacecraftId(Integer spacecraftId) {
+        String sql = "SELECT COUNT(*) FROM missions WHERE spacecraft_id = ?";
+        Integer count = jdbcTemplate.queryForObject(sql, Integer.class, spacecraftId);
+        return count != null && count > 0;
+    }
+
+    @Override
     public void update(Mission mission) {
         String sql = "UPDATE missions SET name = ?, start_date = ?, end_date = ?, mission_status = ?, objectives = ? WHERE id = ?";
 

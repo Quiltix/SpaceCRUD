@@ -38,18 +38,17 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<ErrorResponseDto> handleIllegalArgument(IllegalArgumentException ex, WebRequest request) {
         ErrorResponseDto errorResponse = new ErrorResponseDto(
                 HttpStatus.BAD_REQUEST.value(),
-                "Конфликт",
+                "Conflict",
                 Collections.singletonList(ex.getMessage())
         );
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
-    // Обработчик для нашего кастомного исключения EntityNotFoundException
     @ExceptionHandler(EntityAlreadyExists.class)
     public ResponseEntity<ErrorResponseDto> handleAlreadyExists(EntityAlreadyExists ex, WebRequest request) {
         ErrorResponseDto errorResponse = new ErrorResponseDto(
                 HttpStatus.BAD_REQUEST.value(),
-                "Конфликт имен",
+                "Name conflict",
                 Collections.singletonList(ex.getMessage())
         );
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
