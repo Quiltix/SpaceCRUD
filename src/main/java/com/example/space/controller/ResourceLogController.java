@@ -1,10 +1,13 @@
 package com.example.space.controller;
 
 
+import com.example.space.config.ApiDateFormat;
 import com.example.space.data.dto.resource.ResourceLogResponseDto;
 import com.example.space.service.ResourceLogService;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -21,8 +24,14 @@ public class ResourceLogController {
     public ResponseEntity<List<ResourceLogResponseDto>> getAllLogs(
             @RequestParam(required = false) Integer spacecraftId,
             @RequestParam(required = false) Integer resourceId,
-            @RequestParam(required = false) LocalDate startDate,
-            @RequestParam(required = false) LocalDate endDate
+            @RequestParam(required = false)
+            @DateTimeFormat(pattern = ApiDateFormat.PATTERN)
+            @Schema(type = "string", pattern = ApiDateFormat.REGEX, example = ApiDateFormat.EXAMPLE)
+            LocalDate startDate,
+            @RequestParam(required = false)
+            @DateTimeFormat(pattern = ApiDateFormat.PATTERN)
+            @Schema(type = "string", pattern = ApiDateFormat.REGEX, example = ApiDateFormat.EXAMPLE)
+            LocalDate endDate
             ) {
         List<ResourceLogResponseDto> list = resourceLogService.getAllLogs(spacecraftId, resourceId, startDate, endDate);
         return ResponseEntity.ok(list);

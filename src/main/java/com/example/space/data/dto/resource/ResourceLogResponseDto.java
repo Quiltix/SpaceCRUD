@@ -1,6 +1,8 @@
 package com.example.space.data.dto.resource;
 
+import com.example.space.config.ApiDateTimeFormat;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -13,6 +15,7 @@ public class ResourceLogResponseDto {
     private Integer resourceId;
     private BigDecimal quantityChange;
 
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @Schema(type = "string", pattern = ApiDateTimeFormat.REGEX, example = ApiDateTimeFormat.EXAMPLE)
+    @JsonFormat(pattern = ApiDateTimeFormat.PATTERN)
     private LocalDateTime timestamp;
-}
+} 

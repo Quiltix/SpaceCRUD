@@ -1,5 +1,6 @@
 package com.example.space.controller;
 
+import com.example.space.config.ApiDateFormat;
 import com.example.space.data.dto.crewmember.CrewMemberCreateDto;
 import com.example.space.data.dto.crewmember.CrewMemberResponseDto;
 import com.example.space.data.dto.crewmember.CrewMemberUpdateDto;
@@ -10,6 +11,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -35,8 +37,14 @@ public class CrewMemberController {
     public ResponseEntity<List<CrewMemberResponseDto>> getAllCrewMembers(
             @RequestParam(required = false) HealthStatus status,
             @RequestParam(required = false) String search,
-            @RequestParam(required = false) @Schema(example = "2006-09-28") LocalDate startDate,
-            @RequestParam(required = false) @Schema(example = "2006-09-28") LocalDate endDate
+            @RequestParam(required = false)
+            @DateTimeFormat(pattern = ApiDateFormat.PATTERN)
+            @Schema(type = "string", pattern = ApiDateFormat.REGEX, example = ApiDateFormat.EXAMPLE)
+            LocalDate startDate,
+            @RequestParam(required = false)
+            @DateTimeFormat(pattern = ApiDateFormat.PATTERN)
+            @Schema(type = "string", pattern = ApiDateFormat.REGEX, example = ApiDateFormat.EXAMPLE)
+            LocalDate endDate
             ) {
         List<CrewMemberResponseDto> list = crewMemberService.getAllCrewMembers(search, status, startDate, endDate);
         return ResponseEntity.ok(list);

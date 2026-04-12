@@ -1,7 +1,9 @@
 package com.example.space.data.dto.crewmember;
 
+import com.example.space.config.ApiDateFormat;
 import com.example.space.data.enums.HealthStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Size;
@@ -25,6 +27,7 @@ public class CrewMemberCreateDto {
  private HealthStatus healthStatus; // Если null, сервис поставит дефолт
 
  @Past(message = "Birth date must be in the past")
- @JsonFormat(pattern = "yyyy-MM-dd")
+ @Schema(type = "string", pattern = ApiDateFormat.REGEX, example = ApiDateFormat.EXAMPLE)
+ @JsonFormat(pattern = ApiDateFormat.PATTERN)
  private LocalDate birthDate;
 }

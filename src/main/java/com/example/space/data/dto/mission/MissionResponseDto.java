@@ -1,7 +1,9 @@
 package com.example.space.data.dto.mission;
 
+import com.example.space.config.ApiDateTimeFormat;
 import com.example.space.data.enums.MissionStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -14,10 +16,12 @@ public class MissionResponseDto {
 
      private Integer spacecraftId;
 
-     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+     @Schema(type = "string", pattern = ApiDateTimeFormat.REGEX, example = ApiDateTimeFormat.EXAMPLE)
+     @JsonFormat(pattern = ApiDateTimeFormat.PATTERN)
      private LocalDateTime startDate;
 
-     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+     @Schema(type = "string", pattern = ApiDateTimeFormat.REGEX, example = ApiDateTimeFormat.EXAMPLE)
+     @JsonFormat(pattern = ApiDateTimeFormat.PATTERN)
      private LocalDateTime endDate;
 
      private MissionStatus missionStatus;

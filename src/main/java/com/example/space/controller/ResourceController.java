@@ -1,5 +1,6 @@
 package com.example.space.controller;
 
+import com.example.space.config.ApiDateFormat;
 import com.example.space.data.dto.resource.ResourceChangeDto;
 import com.example.space.data.dto.resource.ResourceCreateDto;
 import com.example.space.data.dto.resource.ResourceResponseDto;
@@ -10,6 +11,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -37,7 +39,10 @@ public class ResourceController {
             @RequestParam(required = false)BigDecimal maxCurrentQuantity,
             @RequestParam(required = false) Integer resourceTypeId,
             @RequestParam(required = false) Integer spacecraftId,
-            @RequestParam(required = false) @Schema(example = "2026-03-26") LocalDate lastUpdated
+            @RequestParam(required = false)
+            @DateTimeFormat(pattern = ApiDateFormat.PATTERN)
+            @Schema(type = "string", pattern = ApiDateFormat.REGEX, example = ApiDateFormat.EXAMPLE)
+            LocalDate lastUpdated
 
             ) {
         List<ResourceResponseDto> list = resourceService.getAllResources(maxCurrentQuantity, resourceTypeId, spacecraftId, lastUpdated);

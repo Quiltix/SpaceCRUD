@@ -1,7 +1,9 @@
 package com.example.space.data.dto.experiment;
 
+import com.example.space.config.ApiDateTimeFormat;
 import com.example.space.data.enums.ExperimentStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -20,10 +22,12 @@ public class ExperimentResponseDto {
 
     private Integer responsibleMemberId;
 
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @Schema(type = "string", pattern = ApiDateTimeFormat.REGEX, example = ApiDateTimeFormat.EXAMPLE)
+    @JsonFormat(pattern = ApiDateTimeFormat.PATTERN)
     private LocalDateTime startTime;
 
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @Schema(type = "string", pattern = ApiDateTimeFormat.REGEX, example = ApiDateTimeFormat.EXAMPLE)
+    @JsonFormat(pattern = ApiDateTimeFormat.PATTERN)
     private LocalDateTime endTime;
 
     private String results;
