@@ -14,6 +14,8 @@ public class ResourceCreateDto {
  @NotNull(message = "Resource Type ID is mandatory")
  private Integer resourceTypeId;
 
+ private String name;
+
  @Positive(message = "Current quantity must be positive")
  private BigDecimal currentQuantity;
 

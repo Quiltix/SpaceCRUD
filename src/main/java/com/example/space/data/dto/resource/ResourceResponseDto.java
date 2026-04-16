@@ -16,6 +16,8 @@ public class ResourceResponseDto {
 
  private Integer resourceTypeId;
 
+ private String name;
+
  private BigDecimal currentQuantity;
 
  private BigDecimal maxCapacity;

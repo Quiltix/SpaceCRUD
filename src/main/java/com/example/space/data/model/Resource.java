@@ -10,6 +10,7 @@ public class Resource {
     private Integer id;
     private Integer spacecraftId;
     private Integer resourceTypeId;
+    private String name;
     private BigDecimal currentQuantity;
     private BigDecimal maxCapacity;
     private String unit;
