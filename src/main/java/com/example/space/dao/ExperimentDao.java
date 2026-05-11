@@ -1,5 +1,6 @@
 package com.example.space.dao;
 
+import com.example.space.data.dto.experiment.ExperimentDurationDto;
 import com.example.space.data.enums.ExperimentStatus;
 import com.example.space.data.model.Experiment;
 
@@ -12,6 +13,8 @@ public interface ExperimentDao {
     Optional<Experiment> findById(Integer id);
 
     List<Experiment> findAll(String search, Integer missionId, ExperimentStatus status, Integer responsibleMemberId);
+
+    List<ExperimentDurationDto> findTop3ByDuration();
 
     void update(Experiment experiment);
 

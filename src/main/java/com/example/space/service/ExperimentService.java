@@ -2,6 +2,7 @@ package com.example.space.service;
 
 import com.example.space.dao.ExperimentDao;
 import com.example.space.data.dto.experiment.ExperimentCreateDto;
+import com.example.space.data.dto.experiment.ExperimentDurationDto;
 import com.example.space.data.dto.experiment.ExperimentResponseDto;
 import com.example.space.data.dto.experiment.ExperimentUpdateDto;
 import com.example.space.data.enums.ExperimentStatus;
@@ -61,5 +62,9 @@ public class ExperimentService {
     public Experiment getExperimentEntityById(Integer id) {
         return experimentDao.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Experiment not found with id: " + id));
+    }
+
+    public List<ExperimentDurationDto> getTop3ByDuration() {
+        return experimentDao.findTop3ByDuration();
     }
 }

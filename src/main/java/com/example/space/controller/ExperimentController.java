@@ -1,6 +1,7 @@
 package com.example.space.controller;
 
 import com.example.space.data.dto.experiment.ExperimentCreateDto;
+import com.example.space.data.dto.experiment.ExperimentDurationDto;
 import com.example.space.data.dto.experiment.ExperimentResponseDto;
 import com.example.space.data.dto.experiment.ExperimentUpdateDto;
 import com.example.space.data.enums.ExperimentStatus;
@@ -64,5 +65,11 @@ public class ExperimentController {
     public ResponseEntity<Void> deleteExperiment(@PathVariable Integer id) {
         experimentService.deleteExperiment(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/top-by-duration")
+    public ResponseEntity<List<ExperimentDurationDto>> getTop3ByDuration() {
+        List<ExperimentDurationDto> list = experimentService.getTop3ByDuration();
+        return ResponseEntity.ok(list);
     }
 }

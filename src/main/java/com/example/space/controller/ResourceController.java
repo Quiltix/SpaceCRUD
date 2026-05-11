@@ -5,6 +5,8 @@ import com.example.space.data.dto.resource.ResourceChangeDto;
 import com.example.space.data.dto.resource.ResourceCreateDto;
 import com.example.space.data.dto.resource.ResourceResponseDto;
 import com.example.space.data.dto.resource.ResourceUpdateDto;
+import com.example.space.data.dto.resource.SpacecraftConsumptionDto;
+import com.example.space.data.dto.resource.SpacecraftResourceStatusDto;
 import com.example.space.service.ResourceService;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
@@ -80,5 +82,17 @@ public class ResourceController {
     public ResponseEntity<Void> deleteResource(@PathVariable Integer id) {
         resourceService.deleteResource(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/status")
+    public ResponseEntity<List<SpacecraftResourceStatusDto>> getSpacecraftResourceStatus() {
+        List<SpacecraftResourceStatusDto> list = resourceService.getSpacecraftResourceStatus();
+        return ResponseEntity.ok(list);
+    }
+
+    @GetMapping("/consumption")
+    public ResponseEntity<List<SpacecraftConsumptionDto>> getConsumptionLast24h() {
+        List<SpacecraftConsumptionDto> list = resourceService.getConsumptionLast24h();
+        return ResponseEntity.ok(list);
     }
 }

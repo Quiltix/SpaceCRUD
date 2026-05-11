@@ -6,6 +6,8 @@ import com.example.space.data.dto.resource.ResourceChangeDto;
 import com.example.space.data.dto.resource.ResourceCreateDto;
 import com.example.space.data.dto.resource.ResourceResponseDto;
 import com.example.space.data.dto.resource.ResourceUpdateDto;
+import com.example.space.data.dto.resource.SpacecraftConsumptionDto;
+import com.example.space.data.dto.resource.SpacecraftResourceStatusDto;
 import com.example.space.data.model.Resource;
 import com.example.space.data.model.ResourceLog;
 import com.example.space.exception.error.EntityNotFoundException;
@@ -63,34 +65,32 @@ public class ResourceService {
 
     /**
      * Метод для траты или пополнения ресурса с записью в лог.
+     * Для списания используется хранимая процедура с блокировкой строки.
      */
     @Transactional
     public ResourceResponseDto changeQuantity(Integer id, ResourceChangeDto changeDto) {
         Resource resource = resourceDao.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Resource not found with id: " + id));
 
-        BigDecimal currentQty = resource.getCurrentQuantity();
         BigDecimal changeQty = changeDto.getQuantityChange();
-        BigDecimal newQty = currentQty.add(changeQty);
 
-        // Бизнес-проверка 1: Нельзя потратить больше, чем есть (уход в минус)
-        if (newQty.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException(
-                    "Cannot spend resources. Current: " + currentQty + ", Attempt to change: " + changeQty);
+        if (changeQty.compareTo(BigDecimal.ZERO) < 0) {
+            resourceDao.consumeResourceById(id, changeQty.abs());
+            Resource updated = resourceDao.findById(id).orElse(resource);
+            return resourceMapper.toDto(updated);
         }
 
-        // Бизнес-проверка 2: Нельзя пополнить больше максимальной вместимости
+        BigDecimal currentQty = resource.getCurrentQuantity();
+        BigDecimal newQty = currentQty.add(changeQty);
+
         if (newQty.compareTo(resource.getMaxCapacity()) > 0) {
             throw new IllegalArgumentException(
                     "Cannot replenish resources beyond max capacity. Max: " + resource.getMaxCapacity() + ", Result would be: " + newQty);
         }
 
         LocalDateTime now = LocalDateTime.now();
-
-        // 1. Обновляем количество в таблице resources
         resourceDao.updateQuantity(id, newQty, now);
 
-        // 2. Создаем запись в таблице resource_logs
         ResourceLog log = new ResourceLog();
         log.setSpacecraftId(resource.getSpacecraftId());
         log.setResourceId(resource.getId());
@@ -99,9 +99,16 @@ public class ResourceService {
 
         resourceLogDao.save(log);
 
-        // 3. Возвращаем обновленный объект (для ответа формируем его вручную, чтобы не делать лишний SELECT)
         resource.setCurrentQuantity(newQty);
         resource.setLastUpdated(now);
         return resourceMapper.toDto(resource);
+    }
+
+    public List<SpacecraftResourceStatusDto> getSpacecraftResourceStatus() {
+        return resourceDao.findSpacecraftResourceStatus();
+    }
+
+    public List<SpacecraftConsumptionDto> getConsumptionLast24h() {
+        return resourceDao.findConsumptionLast24h();
     }
 }

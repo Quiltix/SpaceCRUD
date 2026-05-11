@@ -1,5 +1,6 @@
 package com.example.space.dao;
 
+import com.example.space.data.dto.experiment.ExperimentDurationDto;
 import com.example.space.data.enums.ExperimentStatus;
 import com.example.space.data.model.Experiment;
 import lombok.RequiredArgsConstructor;
@@ -147,5 +148,35 @@ public class ExperimentDaoImpl implements ExperimentDao {
     public void deleteById(Integer id) {
         String sql = "DELETE FROM experiments WHERE id = ?";
         jdbcTemplate.update(sql, id);
+    }
+
+    @Override
+    public List<ExperimentDurationDto> findTop3ByDuration() {
+        String sql = """
+            WITH experiment_duration AS (
+                SELECT
+                    mission_id,
+                    name,
+                    experiment_status,
+                    EXTRACT(EPOCH FROM (end_time - start_time)) / 3600 AS duration_hours,
+                    RANK() OVER (PARTITION BY mission_id ORDER BY (end_time - start_time) DESC) as exp_rank
+                FROM experiments
+                WHERE end_time IS NOT NULL AND start_time IS NOT NULL
+            )
+            SELECT mission_id, name, experiment_status, duration_hours, exp_rank
+            FROM experiment_duration
+            WHERE exp_rank <= 3
+            ORDER BY mission_id, exp_rank
+            """;
+        RowMapper<ExperimentDurationDto> rowMapper = (rs, rowNum) -> {
+            ExperimentDurationDto dto = new ExperimentDurationDto();
+            dto.setMissionId(rs.getInt("mission_id"));
+            dto.setName(rs.getString("name"));
+            dto.setExperimentStatus(rs.getString("experiment_status"));
+            dto.setDurationHours(rs.getBigDecimal("duration_hours"));
+            dto.setExpRank(rs.getInt("exp_rank"));
+            return dto;
+        };
+        return jdbcTemplate.query(sql, rowMapper);
     }
 }
